@@ -18,3 +18,9 @@ def send_welcome(message):
         "to get the USD to UAH exchange rate.")
 
 
+@bot.message_handler(commands=["get_exchange_rate"])
+def send_exchange_rate(message):
+    bot.reply_to(message, "1 USD = 4.00 TRY")
+
+
+bot.polling()
