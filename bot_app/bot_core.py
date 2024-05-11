@@ -3,6 +3,8 @@ import os
 import telebot
 from dotenv import load_dotenv
 
+from parser.xpath_parser import get_exchange_rate
+
 load_dotenv()
 
 API_TOKEN = os.getenv("API_TOKEN")
@@ -20,7 +22,8 @@ def send_welcome(message):
 
 @bot.message_handler(commands=["get_exchange_rate"])
 def send_exchange_rate(message):
-    bot.reply_to(message, "1 USD = 4.00 TRY")
+    exchange_rate = get_exchange_rate()
+    bot.reply_to(message, exchange_rate)
 
 
 bot.polling()
