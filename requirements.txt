@@ -1,0 +1,4 @@
+python-dotenv~=1.0.1
+requests~=2.31.0
+lxml~=5.2.1
+celery~=5.4.0
