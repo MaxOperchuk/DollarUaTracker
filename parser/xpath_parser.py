@@ -1,21 +1,31 @@
 import os
 
-import requests
+import tenacity
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from lxml import html
+
+from parser.request import get_response
 
 
 load_dotenv()
 
 URL = os.getenv("RATE_URL")
-RATE_SEARCH_PATTERN = "//div[@jsname='LXPcOd']//div[@jsname='ip75Cb']/div/text()"
+RATE_SEARCH_PATTERN = (
+    "c-wiz:nth-of-type(2) > div > div:nth-of-type(4) "
+    "> div > main > div:nth-of-type(2) > div > c-wiz "
+    "> div > div > div > div > div > div > div > span > div"
+)
 
 
 def get_exchange_rate() -> float:
-    response = requests.get(URL)
-    html_content = response.text
-    tree = html.fromstring(html_content)
 
-    rate = tree.xpath(RATE_SEARCH_PATTERN)
+    try:
+        response_content = get_response()
+    except tenacity.RetryError:
+        return 0
 
-    return float(rate[0])
+    soup = BeautifulSoup(response_content, "html.parser")
+
+    rate = soup.select_one(RATE_SEARCH_PATTERN).text
+
+    return float(rate)
