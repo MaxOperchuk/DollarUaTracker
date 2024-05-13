@@ -1,19 +1,26 @@
+import os
 from datetime import datetime
+
+from dotenv import load_dotenv
 
 from database.connect_db import get_database_connection
 from database.create_db import create_table
 
 
-def populate_table(exchange_rate: float) -> None:
+load_dotenv()
 
+TABLE_NAME = os.getenv("TABLE_NAME")
+
+
+def populate_table(time: datetime, exchange_rate: float) -> None:
     create_table()
 
-    add_data_query = """
-        INSERT INTO exchange_rates 
+    add_data_query = f"""
+        INSERT INTO {TABLE_NAME} 
         (date, usd_to_uah) VALUES (?, ?);
     """
 
-    con = get_database_connection()
-    con.execute(add_data_query, (datetime.now(), exchange_rate))
-    con.commit()
-    con.close()
+    conn = get_database_connection()
+    conn.execute(add_data_query, (time, exchange_rate))
+    conn.commit()
+    conn.close()
