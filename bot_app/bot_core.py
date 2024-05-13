@@ -3,7 +3,9 @@ import os
 import telebot
 from dotenv import load_dotenv
 
-from parser.xpath_parser import get_exchange_rate
+from database.extract_data import fetch_data
+from writer.xlsx_writer import write_to_xlsx
+
 
 load_dotenv()
 
@@ -17,13 +19,19 @@ def send_welcome(message):
         message,
         "Hello, I am a bot. "
         "Enter the command /get_exchange_rate "
-        "to get the USD to UAH exchange rate.")
+        "to get the USD to UAH exchange rate.",
+    )
 
 
 @bot.message_handler(commands=["get_exchange_rate"])
 def send_exchange_rate(message):
-    exchange_rate = get_exchange_rate()
-    bot.reply_to(message, exchange_rate)
+    data = fetch_data()
+    write_to_xlsx(data)
+
+    with open("exchange_rates.xlsx", "rb") as file:
+        bot.send_document(message.chat.id, file)
+
+    os.remove("exchange_rates.xlsx")
 
 
 bot.polling()
