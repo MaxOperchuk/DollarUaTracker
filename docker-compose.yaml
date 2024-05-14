@@ -1,0 +1,49 @@
+services:
+  bot-app:
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "python database/create_db.py &&
+            python bot_app/bot_core.py"
+    depends_on:
+      - redis
+    restart: on-failure
+
+
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+
+  celery:
+    build:
+      context: .
+    command: "celery -A tasks  worker --loglevel=info -P eventlet"
+    volumes:
+      - ./:/app
+    depends_on:
+      - redis
+    restart: on-failure
+    env_file:
+      - .env
+
+
+  celery-beat:
+    build:
+      context: .
+    volumes:
+      - ./:/app
+    command: >
+      sh -c "celery -A tasks beat -l info"
+    depends_on:
+      - redis
+    restart: on-failure
+    env_file:
+      - .env
