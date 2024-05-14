@@ -1,7 +1,12 @@
 import os
+import sys
 
 import telebot
 from dotenv import load_dotenv
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+)
 
 from database.extract_data import fetch_data
 from writer.xlsx_writer import write_to_xlsx
@@ -31,7 +36,6 @@ def send_exchange_rate(message):
     with open("exchange_rates.xlsx", "rb") as file:
         bot.send_document(message.chat.id, file)
 
-    os.remove("exchange_rates.xlsx")
 
-
-bot.polling()
+if __name__ == "__main__":
+    bot.polling()
