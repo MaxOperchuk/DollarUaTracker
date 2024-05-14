@@ -1,6 +1,11 @@
 import os
+import sys
 
 from dotenv import load_dotenv
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+)
 
 from database.connect_db import get_database_connection
 
@@ -21,3 +26,7 @@ def create_table() -> None:
     con = get_database_connection()
     con.execute(authors_table_creation_query)
     con.close()
+
+
+if __name__ == "__main__":
+    create_table()
