@@ -7,8 +7,8 @@ services:
     volumes:
       - ./:/app
     command: >
-      sh -c "python database/create_db.py &&
-            python bot_app/bot_core.py"
+      sh -c "python src/database/create_db.py &&
+            python src/bot_app/bot_core.py"
     depends_on:
       - redis
     restart: on-failure
@@ -25,7 +25,8 @@ services:
   celery:
     build:
       context: .
-    command: "celery -A tasks  worker --loglevel=info -P eventlet"
+    command:  > 
+      sh -c "celery -A tasks worker --loglevel=info -P eventlet"
     volumes:
       - ./:/app
     depends_on:
