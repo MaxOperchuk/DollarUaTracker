@@ -1,16 +1,10 @@
 import os
-import sys
 
 import telebot
 from dotenv import load_dotenv
 
-sys.path.insert(
-    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-)
-
-from database.extract_data import fetch_data
-from writer.xlsx_writer import write_to_xlsx
-
+from src.database.extract_data import fetch_data
+from src.writer.xlsx_writer import write_to_xlsx
 
 load_dotenv()
 
