@@ -4,7 +4,7 @@ import tenacity
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-from parser.request import get_response
+from src.parser.request import get_response
 
 
 load_dotenv()

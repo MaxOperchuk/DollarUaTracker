@@ -3,7 +3,7 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from database.connect_db import get_database_connection
+from src.database.connect_db import get_database_connection
 
 
 load_dotenv()
