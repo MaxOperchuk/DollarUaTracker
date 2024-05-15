@@ -1,16 +1,10 @@
 import os
-import sys
 from datetime import datetime
 
 import pytz
 from dotenv import load_dotenv
 
-sys.path.insert(
-    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-)
-
-from database.connect_db import get_database_connection
-
+from src.database.connect_db import get_database_connection
 
 load_dotenv()
 
